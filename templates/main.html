@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+	<head>
+		<title>Rango</title>
+	</head>
+
+	<body>
+		<h1>Rango says...</h1>
+		Hello World! <strong> {{ boldmessage }}</strong><br />
+		<a href="/rango/about/">About</a><br />
+		<img src="{% static "images/logo.png" %}"  alt="Picture of the Logo" />
+		
+		{% if categories %}
+			<ul>
+				{% for category in categories %}
+				<li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<strong>There are no cateories present.</strong>
+		{% endif %}
+
+		{% if pages %}
+			<ul>
+				{% for page in pages %}
+				<li>{{ page.title }}</li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<strong>There are no pages present.</strong>
+		{% endif %}
+
+	<a href="/rango/add_category/">Add a New Category</a><br />
+
+	<a href="/rango/register/">Register Here!</a>
+
+	<a href="/rango/login/">Log In</a>
+	</body>
+</html>

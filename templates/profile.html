@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row text-left">
+		<div class="col-md-3">
+			<img src="{% static "images/profile.png" %}" class="profile-img-card" alt="Default Picture"i align="left"/>
+			{% if user %}
+				<h4><strong>Name:</strong> {{ userName }}</h4>
+				<h4><strong>Following:</strong> {{ user.userfollow.following }}</h4>
+				<h4><strong>Followers:</strong> {{ user.userfollow.followers }}<br /></h4>
+				<h4><p>Notifications:</p></h3>
+				<ul>
+					<li>(3) New Algorithms</li>
+					<li>(1) Edit</li>
+					<li>(2) New Followers</li>
+				</ul>
+			{% else %}
+				<strong>The profile could not be loaded at this time</strong>
+			{% endif %}
+		</div>
+		<div class="col-md-9">
+			<div class="Algorithm-Group">
+			<h2>Algorithms</h2>
+			<div class="list-group">
+				{% for alg in algorithms %}
+				<button id="alg_button" type="button" class="list-group-item list-group-item-action algButton">{{ alg.algorithm_name }}</button>
+				{% endfor %}
+			</div>
+				<a id="changing_link" href="/rango/algorithm/#/"><div id="algName">{{ alg_name }}</div></a>
+				<h4><strong>Followers:<div id="follower_count">{{ follower_count }}</div></strong></h4>
+			</div>	
+			<br />
+			<div class="Following-Group">
+			<h2>Following</h2>
+			<div class="list-group">
+				<button type="button" class="list-group-item list-group-item-action">Bend - Alice Dabin</button>
+				<button type="button" class="list-group-item list-group-item-action">Roller - Jordan Peele</button>
+				<button type="button" class="list-group-item list-group-item-action">Gestial - Tomi Lahren</button>
+			</div>
+			</div>	
+			<a href="{% url 'isso-submission' %}">Submit an Algorithm</a>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

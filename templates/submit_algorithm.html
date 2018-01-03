@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ algForm.as_p }}
+	{{ pdbForm.as_p }}
+	<button type='submit'>Upload</button>
+</form>
+
+<a href="{% url 'isso-profile' %}">Back To Profile</a>
+
+{% endblock %}

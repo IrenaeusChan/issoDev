@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+	<div class="jumbotron">
+		<div class="container">
+			<div class="col-md-4 vcenter">
+				<h1>ISSO v1.0</h1>
+				<p>Irenaeus' Secondary<br>Structure Organization</p>
+			</div><!--
+			--><div class="col-md-8 vcenter">
+				<img src="{% static "images/generalStructures.png" %}" alt="Picture of Secondary Structures"/>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row text-center">
+			<form class="form-inline my-2 my-lg-0">
+				<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			</form><br />
+			<p>Search for PDB Files, Classifications, User Algorithms</p>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				<h2>Browse PDB Files...</h2><br />
+				<p><strong>Browse our collection of PDB Files</strong><br /><br />
+				Each PDB File has been pulled from The Protein Data Bank and has been analyzed with our custom and user algorithms to determine their secondary structure category<br /><br /><br />
+				<strong>Here are a few!</strong></p>
+				{% if pdb %}
+					<ul>
+						{% for pdblink in pdb %}
+						<li><a href="/rango/pdb/{{ pdblink.slug }}">{{ pdblink.pdb_iden }}</a></li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<strong>There are currently no PDB Files available.</strong>
+				{% endif %}
+				<a href="/rango/add_pdb/">Add Another PDB File</a><br />
+			</div>
+			<div class="col-md-6">
+				<h2>Category Algorithms</h2><br />
+				<p><strong>Explore different categories of secondary structures</strong><br /><br />
+				Categories used for the classification of secondary structures are user-defined. Each category was submitted by various users to identify and categorize a series of secondary protein structures<br /><br />
+				<strong>Start exploring!</strong></p>
+				{% if algorithms %}
+					<ul>
+						{% for alg in algorithms %}
+						<li><a href="/rango/algorithm/{{ alg.slug }}">{{ alg.algorithm_name }}</a></li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<strong>There are currently no algorithms available.</strong>
+				{% endif %}
+			</div>
+		</div>
+		<p> Visits: {{ visits }}</p>
+	</div>
+
+{% endblock %}

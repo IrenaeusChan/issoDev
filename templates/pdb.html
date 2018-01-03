@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- breaking out the library for debugging -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/JSmoljQueryExt.js' %}"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/JSmolCore.js' %}"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/JSmolApplet.js' %}"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/JSmolApi.js' %}"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/JSmolControls.js' %}"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/j2sjmol.js' %}"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/JSmol.js' %}"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/JSmolConsole.js' %}"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/JSmolMenu.js' %}"></script>
+<!-- // following two only necessary for WebGL version: 
+-->
+<script type="text/javascript" src="{% static 'jsmol/js/JSmolThree.js' %}"></script>
+<script type="text/javascript" src="{% static 'jsmol/js/JSmolGLmol.js' %}"></script>
+
+<script type="text/javascript">
+
+Jmol._isAsync = false;
+
+Jmol.getProfile() // records repeat calls to overridden or overloaded Java methods
+
+var jmolApplet0; // set up in HTML table, below
+
+// use ?_USE=JAVA or _USE=SIGNED or _USE=HTML5
+
+jmol_isReady = function(applet) {
+	//document.title = (applet._id + " is ready")
+	Jmol._getElement(applet, "appletdiv").style.border="1px solid blue"
+ 
+}		
+
+Info = {
+	width: 460,
+	height: 600,
+	debug: false,
+	color: "#F0F0F0",
+	zIndexBase: 20000,
+	z:{monitorZIndex:100},
+	addSelectionOptions: false,
+	serverURL: "http://chemapps.stolaf.edu/jmol/jsmol/php/jsmol.php",
+	use: "HTML5",
+  //language: "fr", // NOTE: LOCALIZATION REQUIRES <meta charset="utf-8"> (see JSmolCore Jmol.featureDetection.supportsLocalization)
+	jarPath: "{% static 'jsmol/java' %}",
+	j2sPath: "{% static 'jsmol/j2s' %}",
+	jarFile: "{% static 'jsmol/java/JmolApplet.jar' %}",
+	isSigned: false,
+	disableJ2SLoadMonitor: true,
+	disableInitialConsole: true, // default now is true
+	readyFunction: jmol_isReady,
+	allowjavascript: true,
+//	appletLoadingImage: "none",
+	script: "set antialiasdisplay;load http://files.rcsb.org/view/{{ pdb_iden }}.pdb; wireframe off; spacefill off; backbone off; cartoon on; color structure;"
+//	script: "set antialiasDisplay;set showtiming;load async data/caffeine.mol;"
+	//,defaultModel: ":dopamine"
+  //,noscript: true
+	//console: "none", // default will be jmolApplet0_infodiv
+	//script: "set antialiasDisplay;background white;load data/caffeine.mol;"
+  //delay 3;background yellow;delay 0.1;background white;for (var i = 0; i < 10; i+=1){rotate y 3;delay 0.01}"
+}
+</script>
+
+	{% if pdb %}
+	<div class="container">
+		<h1>{{ pdb_iden }}</h1>
+		<div class="row">
+			<div class="col-md-6 special-fix">
+<script>
+
+// note that the variable name MUST match the first parameter in quotes
+
+
+jmolApplet0 = Jmol.getApplet("jmolApplet0", Info)
+
+// note that now scripts can be sent immediately after the _Applet object is created
+
+//Jmol.script(jmolApplet0,"background gray;delay 0.5;background black")
+var lastPrompt=0;
+</script>
+			
+<h5><a href="{{ pdb.url }}">Click Here to Download from The Protein Data Bank Website</a></h5>
+			</div>
+			<div class="col-md-6">
+				{% for sheetIden, algList  in sheetAlg.items %}
+				<strong>Sheet {{ sheetIden }}</strong>
+					{% for alg in algList %}
+					<table>
+					<tr>
+						<td>{{ alg.algorithm_name }}</td>
+						<td>{{alg.general_description }}</td>
+						<td><a href="/rango/algorithm/{{ alg.slug }}">{{ alg.algorithm_name }}</a></td>
+					</tr>
+					</table>
+					<br />
+					{% endfor %}	
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	{% endif %}
+{% endblock %}
